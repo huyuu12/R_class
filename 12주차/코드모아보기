@@ -1,0 +1,432 @@
+
+setwd("/Users/song-ginam/Desktop/재난안전프로그래밍 임시폴더")
+
+df = read.csv('건강조사 데이터/HN_19~21.csv')
+
+
+
+df1 =subset(df, select = c('year', 'region', 'DF2_pr'))
+df1
+View(df1)
+
+df_s = subset(df,select = c('ainc','DF2_pr','ho_incm5'))
+
+df_s[is.na(df_s)]<-0
+
+ho1 = subset(df_s,df_s$ho_incm5 == "1",select = c('DF2_pr','ho_incm5'))
+ho2= subset(df_s,df_s$ho_incm5 == "2",select = c('DF2_pr','ho_incm5'))
+ho3= subset(df_s,df_s$ho_incm5 == "3",select = c('DF2_pr','ho_incm5'))
+ho4= subset(df_s,df_s$ho_incm5 == "4",select = c('DF2_pr','ho_incm5'))
+ho5= subset(df_s,df_s$ho_incm5 == "5",select = c('DF2_pr','ho_incm5'))
+nrow(ho1)
+nrow(ho2)
+nrow(ho3)
+nrow(ho4)
+nrow(ho5)
+
+#소득분위 별 우울증 환자수
+incm_1 = nrow(subset(ho1,ho1$DF2_pr==1))
+incm_2 = nrow(subset(ho2,ho2$DF2_pr==1))
+incm_3 = nrow(subset(ho3,ho3$DF2_pr==1))
+incm_4 = nrow(subset(ho4,ho4$DF2_pr==1))
+incm_5 = nrow(subset(ho5,ho5$DF2_pr==1))
+
+#소득분위 별 우울증 환자 비율(1000명)
+incm_1_c = incm_1*(1000/nrow(ho1))
+incm_2_c = incm_2*(1000/nrow(ho2))
+incm_3_c = incm_3*(1000/nrow(ho3))
+incm_4_c = incm_4*(1000/nrow(ho4))
+incm_5_c = incm_5*(1000/nrow(ho5))
+
+
+library(ggplot2)
+library(tidyverse)
+
+#소득분위(5)
+incm <- c('1분위','2분위','3분위','4분위','5분위')
+#소득분위 별 우울증 환자 비율
+pr <- c(incm_1_c,incm_2_c,incm_3_c,incm_4_c,incm_5_c)
+
+df <- data.frame(소득분위 = incm,pr = pr)
+
+#install.packages("extrafont")
+#library(extrafont)
+#font_import()
+#library(ggplot2)
+#theme_set(theme_grey(base_family="AppleGothic"))
+
+ggplot(df, aes(x = incm, y = pr, fill = 소득분위)) + geom_bar(stat = "identity") +
+  labs(title = "소득분위별 우울증 비율(1000명)") + xlab("소득분위") +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  ylab("우울증환자") 
+
+
+
+setwd("C:\\Users\\mn581\\OneDrive\\바탕 화면\\R_Class")
+
+
+df = read.csv("건강조사 데이터\\HN_19~21.csv")
+
+
+df1 =subset(df, select = c('region', 'DF2_pr', 'incm5'))
+df1[is.na(df1$incm5), 'incm5'] = 0 #간혹 결측치 값이 있어서... 유의미한 정도는 아님
+#View(df1)
+
+
+Seoul = subset(df1, region == 1)
+Seoul_all = nrow(Seoul) #서울지역 전체 조사인구
+Seoul_dep = nrow(subset(Seoul, DF2_pr == 1)) #서울지역 조사인구 우울증 환자 수
+Seoul_c = Seoul_dep*(1000/Seoul_all) #조사인구 천 명당 우울증 환자 수
+Seoul_m = sum(Seoul$incm5) / Seoul_all #지역별 소득 지표 -> 소득 5분위 점수(1~5점) 합/ 인구 수
+
+Busan = subset(df1, region == 2)
+Busan_all = nrow(Busan)
+Busan_dep = nrow(subset(Busan, DF2_pr == 1))
+Busan_c = Busan_dep*(1000/Busan_all)
+Busan_m = sum(Busan$incm5) / Busan_all
+
+Daegu = subset(df1, region == 3)
+Daegu_all = nrow(Daegu)
+Daegu_dep = nrow(subset(Daegu, DF2_pr == 1))
+Daegu_c = Daegu_dep*(1000/Daegu_all)
+Daegu_m = sum(Daegu$incm5) / Daegu_all
+
+
+Incheon = subset(df1, region == 4)
+Incheon_all = nrow(Incheon)
+Incheon_dep = nrow(subset(Incheon, DF2_pr == 1))
+Incheon_c = Incheon_dep*(1000/Incheon_all)
+Incheon_m = sum(Incheon$incm5) / Incheon_all
+
+Gwangju = subset(df1, region == 5)
+Gwangju_all = nrow(Gwangju)
+Gwangju_dep = nrow(subset(Gwangju, DF2_pr == 1))
+Gwangju_c = Gwangju_dep*(1000/Gwangju_all)
+Gwangju_m = sum(Gwangju$incm5) / Gwangju_all
+
+Daejeon = subset(df1, region == 6)
+Daejeon_all = nrow(Daejeon)
+Daejeon_dep = nrow(subset(Daejeon, DF2_pr == 1))
+Daejeon_c = Daejeon_dep*(1000/Daejeon_all)
+Daejeon_m = sum(Daejeon$incm5) / Daejeon_all
+
+Ulsan = subset(df1, region == 7)
+Ulsan_all = nrow(Ulsan)
+Ulsan_dep = nrow(subset(Ulsan, DF2_pr == 1))
+Ulsan_c = Ulsan_dep*(1000/Ulsan_all)
+Ulsan_m = sum(Ulsan$incm5) / Ulsan_all
+
+Sejong = subset(df1, region == 8)
+Sejong_all = nrow(Sejong)
+Sejong_dep = nrow(subset(Sejong, DF2_pr == 1))
+Sejong_c = Sejong_dep*(1000/Sejong_all)
+Sejong_m = sum(Sejong$incm5) / Sejong_all
+
+Gyeonggi = subset(df1, region == 9)
+Gyeonggi_all = nrow(Gyeonggi)
+Gyeonggi_dep = nrow(subset(Gyeonggi, DF2_pr == 1))
+Gyeonggi_c = Gyeonggi_dep*(1000/Gyeonggi_all)
+Gyeonggi_m = sum(Gyeonggi$incm5) / Gyeonggi_all
+
+Gangwon = subset(df1, region == 10)
+Gangwon_all = nrow(Gangwon)
+Gangwon_dep = nrow(subset(Gangwon, DF2_pr == 1))
+Gangwon_c = Gangwon_dep*(1000/Gangwon_all)
+Gangwon_m = sum(Gangwon$incm5) / Gangwon_all
+
+Chungbuk = subset(df1, region == 11)
+Chungbuk_all = nrow(Chungbuk)
+Chungbuk_dep = nrow(subset(Chungbuk, DF2_pr == 1))
+Chungbuk_c = Chungbuk_dep*(1000/Chungbuk_all)
+Chungbuk_m = sum(Chungbuk$incm5) / Chungbuk_all
+
+Chungnam = subset(df1, region == 12)
+Chungnam_all = nrow(Chungnam)
+Chungnam_dep = nrow(subset(Chungnam, DF2_pr == 1))
+Chungnam_c = Chungnam_dep*(1000/Chungnam_all)
+Chungnam_m = sum(Chungnam$incm5) / Chungnam_all
+
+Jeonbuk = subset(df1, region == 13)
+Jeonbuk_all = nrow(Jeonbuk)
+Jeonbuk_dep = nrow(subset(Jeonbuk, DF2_pr == 1))
+Jeonbuk_c = Jeonbuk_dep*(1000/Jeonbuk_all)
+Jeonbuk_m = sum(Jeonbuk$incm5) / Jeonbuk_all
+
+Jeonnam = subset(df1, region == 14)
+Jeonnam_all = nrow(Jeonnam)
+Jeonnam_dep = nrow(subset(Jeonnam, DF2_pr == 1))
+Jeonnam_c = Jeonnam_dep*(1000/Jeonnam_all)
+Jeonnam_m = sum(Jeonnam$incm5) / Jeonnam_all
+
+Gyeongbuk = subset(df1, region == 15)
+Gyeongbuk_all = nrow(Gyeongbuk)
+Gyeongbuk_dep = nrow(subset(Gyeongbuk, DF2_pr == 1))
+Gyeongbuk_c = Gyeongbuk_dep*(1000/Gyeongbuk_all)
+Gyeongbuk_m = sum(Gyeongbuk$incm5) / Gyeongbuk_all
+
+Gyeongnam = subset(df1, region == 16)
+Gyeongnam_all = nrow(Gyeongnam)
+Gyeongnam_dep = nrow(subset(Gyeongnam, DF2_pr == 1))
+Gyeongnam_c = Gyeongnam_dep*(1000/Gyeongnam_all)
+Gyeongnam_m = sum(Gyeongnam$incm5) / Gyeongnam_all
+
+Jeju= subset(df1, region == 17)
+Jeju_all = nrow(Jeju)
+Jeju_dep = nrow(subset(Jeju, DF2_pr == 1))
+Jeju_c = Jeju_dep*(1000/Jeju_all)
+Jeju_m = sum(Jeju$incm5) / Jeju_all
+
+
+
+지역 = c("서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종",
+       "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주")
+
+인구 = c(Seoul_all, Busan_all, Daegu_all, Incheon_all, Gwangju_all, Daejeon_all, Ulsan_all,
+        Sejong_all, Gyeonggi_all, Gangwon_all, Chungbuk_all, Chungnam_all, Jeonbuk_all,
+        Jeonnam_all, Gyeongbuk_all, Gyeongnam_all, Jeju_all)
+
+우울증율 = c(Seoul_c, Busan_c, Daegu_c, Incheon_c, Gwangju_c, Daejeon_c, Ulsan_c, Sejong_c,
+         Gyeonggi_c, Gangwon_c, Chungbuk_c, Chungnam_c, Jeonbuk_c, Jeonnam_c, Gyeongbuk_c,
+         Gyeongnam_c, Jeju_c)
+
+
+#############################################################################################################
+
+library(ggplot2)
+
+
+# 그래프를 그리기 위한 데이터 프레임 생성
+plot_data <- data.frame(지역 = factor(지역, levels = 지역),
+                        인구 = 인구,
+                        우울증율 = 우울증율)
+
+# 그래프 1: 지역별 인구 점 그래프
+plot1 <- ggplot(plot_data, aes(x = reorder(지역, 인구), y = 인구)) +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  labs(title = "지역별 인구",
+       x = "지역",
+       y = "인구") +
+  theme_minimal()
+
+# 그래프 2: 지역별 1000명당 우울증 환자 수 점 그래프
+plot2 <- ggplot(plot_data, aes(x = reorder(지역, 인구), y = 우울증율)) +
+  geom_point(color = "salmon", size = 3) +
+  geom_line(aes(group = 1), color = "salmon") +
+  labs(title = "지역별 1000명당 우울증 환자 수",
+       x = "지역",
+       y = "우울증 환자 수 (1000명당)") +
+  theme_minimal()
+
+
+library(gridExtra)
+
+grid.arrange(plot1, plot2, ncol = 1)
+
+#####################소득별..
+
+소득 = c(Seoul_m, Busan_m, Daegu_m, Incheon_m, Gwangju_m, Daejeon_m, Ulsan_m,
+       Sejong_m, Gyeonggi_m, Gangwon_m, Chungbuk_m, Chungnam_m, Jeonbuk_m,
+       Jeonnam_m, Gyeongbuk_m, Gyeongnam_m, Jeju_m)
+
+
+# 그래프를 그리기 위한 데이터 프레임 생성
+plot_data2 <- data.frame(지역 = factor(지역, levels = 지역),
+                        소득 = 소득,
+                        우울증율 = 우울증율)
+
+# 그래프 3: 지역별 소득평균 점 그래프
+plot3 <- ggplot(plot_data2, aes(x = reorder(지역, 소득), y = 소득)) +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  labs(title = "지역별 소득지표",
+       x = "지역",
+       y = "소득") +
+  theme_minimal()
+
+# 그래프 4: 지역별 1000명당 우울증 환자 수 점 그래프
+plot4 <- ggplot(plot_data2, aes(x = reorder(지역, 소득), y = 우울증율)) +
+  geom_point(color = "salmon", size = 3) +
+  geom_line(aes(group = 1), color = "salmon") +
+  labs(title = "지역별 1000명당 우울증 환자 수",
+       x = "지역",
+       y = "우울증 환자 수 (1000명당)") +
+  theme_minimal()
+
+
+grid.arrange(plot3, plot4, ncol = 1)
+
+
+
+
+
+################################################################################
+
+
+
+
+
+
+setwd("C:\\Users\\mn581\\OneDrive\\바탕 화면\\R_Class")
+
+
+df = read.csv("건강조사 데이터\\HN_19~21.csv")
+
+
+df1 =subset(df, select = c('LQ_7HT', 'LQ_4HT', 'DF2_pr'))
+#View(df1)
+
+#sg1 -> sg4 // 제일 잘 잠 -> 제일 못 잠
+
+Sg1 = subset(df1, LQ_7HT == 1)
+Sg1_all = nrow(Sg1)
+Sg1_c = nrow(subset(Sg1, DF2_pr == 1))/Sg1_all #제일 잘 자는 우울증 수/제일 잘 자는 전체
+
+Sg2 = subset(df1, LQ_7HT == 2)
+Sg2_all = nrow(Sg2)
+Sg2_c = nrow(subset(Sg2, DF2_pr == 1))/Sg2_all #제일2 잘 자는 우울증 수/제일2 잘 자는 전체
+
+Sg3 = subset(df1, LQ_7HT == 3)
+Sg3_all = nrow(Sg3)
+Sg3_c = nrow(subset(Sg3, DF2_pr == 1))/Sg3_all #제일3 잘 자는 우울증 수/제일3 잘 자는 전체
+
+Sg4 = subset(df1, LQ_7HT == 4)
+Sg4_all = nrow(Sg4)
+Sg4_c = nrow(subset(Sg4, DF2_pr == 1))/Sg4_all #제일4 잘 자는 우울증 수/제일4 잘 자는 전체
+
+
+s = c("어려움 없음", "어려움 약간", "어려움 많이", "수면 매우 부족")
+dep = c(Sg1_c, Sg2_c, Sg3_c, Sg4_c)
+a = c(Sg1_all, Sg2_all, Sg3_all, Sg4_all)
+
+plot_data <- data.frame(수면 = factor(s, levels = s),
+                        인구 = a,
+                        우울증 = dep)
+
+plot1 <- ggplot(plot_data, aes(x = reorder(수면, -인구), y = 우울증)) +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  labs(title = "수면 활동에 따른 우울증",
+       x = "수면",
+       y = "우울증") +
+  theme_minimal()
+
+plot1
+
+
+
+###################################################################################################
+
+
+
+
+
+setwd("C:\\Users\\mn581\\OneDrive\\바탕 화면\\R_Class")
+
+
+df = read.csv("건강조사 데이터\\HN_19~21.csv")
+
+
+df1 =subset(df, select = c('LQ_4HT', 'DF2_pr'))
+#View(df1)
+
+#wg1 -> wg4 // 제일 일함 -> 제일 일 문제
+
+Wg1 = subset(df1, LQ_4HT == 1)
+Wg1_all = nrow(Wg1)
+Wg1_c = nrow(subset(Wg1, DF2_pr == 1))/Wg1_all #제일 일 잘 하는 우울증 수/제일 일 잘 하는 전체
+
+Wg2 = subset(df1, LQ_4HT == 2)
+Wg2_all = nrow(Wg2)
+Wg2_c = nrow(subset(Wg2, DF2_pr == 1))/Wg2_all #제일 일 잘2 하는 우울증 수/제일 일 잘2 하는 전체
+
+Wg3 = subset(df1, LQ_4HT == 3)
+Wg3_all = nrow(Wg3)
+Wg3_c = nrow(subset(Wg3, DF2_pr == 1))/Wg3_all #제일 일 잘3 하는 우울증 수/제일 일 잘3 하는 전체
+
+Wg4 = subset(df1, LQ_4HT == 4)
+Wg4_all = nrow(Wg4)
+Wg4_c = nrow(subset(Wg4, DF2_pr == 1))/Wg4_all #제일 일 잘4 하는 우울증 수/제일 일 잘4 하는 전체
+
+
+
+s = c("어려움 없음", "어려움 약간", "어려움 많이", "일 활동 불가")
+dep = c(Wg1_c, Wg2_c, Wg3_c, Wg4_c)
+a = c(Wg1_all, Wg2_all, Wg3_all, Wg4_all)
+
+plot_data <- data.frame(일 = factor(s, levels = s),
+                        인구 = a,
+                        우울증 = dep)
+
+plot1 <- ggplot(plot_data, aes(x = reorder(일, -인구), y = 우울증)) +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  labs(title = "일 활동에 따른 우울증",
+       x = "일 활동",
+       y = "우울증") +
+  theme_minimal()
+
+plot1
+
+
+
+######################################################################################
+
+
+
+
+
+#맥 폰트 문제
+#install.packages("extrafont")
+#library(extrafont)
+#font_import()
+#library(ggplot2)
+#theme_set(theme_grey(base_family="AppleGothic"))
+
+setwd("/Users/song-ginam/Desktop/재난안전프로그래밍 임시폴더")
+
+df = read.csv('건강조사 데이터/HN_19~21.csv')
+
+#우울증여부, 소득분위(5분위) 가져오기
+df_s = subset(df,select = c('DF2_pr','ho_incm5'))
+
+#결측치 0(우울증없음)
+df_s[is.na(df_s)]<-0
+
+# 소득분위별로 구분
+ho1 = subset(df_s,df_s$ho_incm5 == "1",select = c('DF2_pr','ho_incm5'))
+ho2= subset(df_s,df_s$ho_incm5 == "2",select = c('DF2_pr','ho_incm5'))
+ho3= subset(df_s,df_s$ho_incm5 == "3",select = c('DF2_pr','ho_incm5'))
+ho4= subset(df_s,df_s$ho_incm5 == "4",select = c('DF2_pr','ho_incm5'))
+ho5= subset(df_s,df_s$ho_incm5 == "5",select = c('DF2_pr','ho_incm5'))
+
+#소득분위 별 우울증 환자수
+incm_1 = nrow(subset(ho1,ho1$DF2_pr==1))
+incm_2 = nrow(subset(ho2,ho2$DF2_pr==1))
+incm_3 = nrow(subset(ho3,ho3$DF2_pr==1))
+incm_4 = nrow(subset(ho4,ho4$DF2_pr==1))
+incm_5 = nrow(subset(ho5,ho5$DF2_pr==1))
+
+#소득분위 별 우울증 환자 비율(1000명)
+incm_1_c = incm_1*(1000/nrow(ho1))
+incm_2_c = incm_2*(1000/nrow(ho2))
+incm_3_c = incm_3*(1000/nrow(ho3))
+incm_4_c = incm_4*(1000/nrow(ho4))
+incm_5_c = incm_5*(1000/nrow(ho5))
+
+library(ggplot2)
+
+#소득분위(5분위)
+incm <- c('1분위','2분위','3분위','4분위','5분위')
+#소득분위 별 우울증 환자 비율
+pr <- c(incm_1_c,incm_2_c,incm_3_c,incm_4_c,incm_5_c)
+
+df <- data.frame(소득분위 = incm,pr = pr)
+
+#바, 선점도 차트
+ggplot(df, aes(x = incm, y = pr, fill = 소득분위)) + geom_bar(stat = "identity") +
+  labs(title = "소득분위별 우울증 비율(1000명 단위)") + xlab("소득분위") +
+  geom_point(color = "skyblue", size = 3) +
+  geom_line(aes(group = 1), color = "skyblue") +
+  ylab("우울증환자") 
